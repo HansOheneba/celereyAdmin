@@ -122,11 +122,9 @@ export default function ClientsPage() {
 
   // Extract unique countries from CLIENTS data
   const countries = React.useMemo(() => {
-    const allCountries = CLIENTS.map((c) => {
-      const parts = c.location.split(",");
-      return parts[parts.length - 1]?.trim();
-    }).filter((c): c is string => !!c);
-
+    const allCountries = CLIENTS.map((c) => c.country).filter(
+      (c): c is string => !!c,
+    );
     return [...new Set(allCountries)].sort();
   }, []);
 
@@ -163,9 +161,11 @@ export default function ClientsPage() {
       // Text search
       if (q) {
         const matchesQuery =
-          c.fullName.toLowerCase().includes(q) ||
+          c.firstName.toLowerCase().includes(q) ||
+          c.lastName.toLowerCase().includes(q) ||
           c.email.toLowerCase().includes(q) ||
-          c.location.toLowerCase().includes(q) ||
+          c.city?.toLowerCase().includes(q) ||
+          c.country.toLowerCase().includes(q) ||
           c.status.toLowerCase().includes(q) ||
           c.riskProfile.toLowerCase().includes(q) ||
           c.subscriptionType.toLowerCase().includes(q);
@@ -174,9 +174,7 @@ export default function ClientsPage() {
 
       // Country filter
       if (selectedCountries.length > 0) {
-        const clientCountry = c.location.split(",").pop()?.trim();
-        if (!clientCountry || !selectedCountries.includes(clientCountry))
-          return false;
+        if (!selectedCountries.includes(c.country)) return false;
       }
 
       // Subscription filter
@@ -541,7 +539,9 @@ export default function ClientsPage() {
               >
                 <TableCell>
                   <div className="flex flex-col">
-                    <span className="font-medium">{client.fullName}</span>
+                    <span className="font-medium">
+                      {client.firstName} {client.lastName}
+                    </span>
                     <span className="text-sm text-muted-foreground">
                       {client.email}
                     </span>
@@ -549,7 +549,7 @@ export default function ClientsPage() {
                 </TableCell>
 
                 <TableCell className="text-muted-foreground">
-                  {client.location}
+                  {client.city}, {client.country}
                 </TableCell>
 
                 <TableCell>

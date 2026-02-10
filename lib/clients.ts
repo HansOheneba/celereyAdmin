@@ -4,9 +4,11 @@ export type SubscriptionType = "Essentials" | "Core" | "Concierge";
 
 export type Client = {
   id: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  location: string;
+  city?: string;
+  country: string;
   status: ClientStatus;
   riskProfile: RiskProfile;
   subscriptionType: SubscriptionType;
@@ -17,9 +19,11 @@ export type Client = {
 export const CLIENTS: Client[] = [
   {
     id: "cl_001",
-    fullName: "Ama Mensah",
+    firstName: "Ama",
+    lastName: "Mensah",
     email: "ama.mensah@example.com",
-    location: "Accra, Ghana",
+    city: "Accra",
+    country: "Ghana",
     status: "Active",
     riskProfile: "Balanced",
     subscriptionType: "Core",
@@ -28,9 +32,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_002",
-    fullName: "Kojo Owusu",
+    firstName: "Kojo",
+    lastName: "Owusu",
     email: "kojo.owusu@example.com",
-    location: "Kumasi, Ghana",
+    city: "Kumasi",
+    country: "Ghana",
     status: "Prospect",
     riskProfile: "Growth",
     subscriptionType: "Essentials",
@@ -39,9 +45,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_003",
-    fullName: "Efua Asare",
+    firstName: "Efua",
+    lastName: "Asare",
     email: "efua.asare@example.com",
-    location: "London, UK",
+    city: "London",
+    country: "UK",
     status: "Inactive",
     riskProfile: "Conservative",
     subscriptionType: "Essentials",
@@ -50,9 +58,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_004",
-    fullName: "James Wellington",
+    firstName: "James",
+    lastName: "Wellington",
     email: "james.wellington@example.com",
-    location: "Toronto, Canada",
+    city: "Toronto",
+    country: "Canada",
     status: "Active",
     riskProfile: "Balanced",
     subscriptionType: "Core",
@@ -61,9 +71,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_005",
-    fullName: "Marie Dubois",
+    firstName: "Marie",
+    lastName: "Dubois",
     email: "marie.dubois@example.com",
-    location: "Paris, France",
+    city: "Paris",
+    country: "France",
     status: "Active",
     riskProfile: "Growth",
     subscriptionType: "Concierge",
@@ -72,9 +84,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_006",
-    fullName: "Sofia Martinez",
+    firstName: "Sofia",
+    lastName: "Martinez",
     email: "sofia.martinez@example.com",
-    location: "Madrid, Spain",
+    city: "Madrid",
+    country: "Spain",
     status: "Prospect",
     riskProfile: "Conservative",
     subscriptionType: "Essentials",
@@ -83,9 +97,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_007",
-    fullName: "Yuki Tanaka",
+    firstName: "Yuki",
+    lastName: "Tanaka",
     email: "yuki.tanaka@example.com",
-    location: "Tokyo, Japan",
+    city: "Tokyo",
+    country: "Japan",
     status: "Active",
     riskProfile: "Growth",
     subscriptionType: "Concierge",
@@ -94,9 +110,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_008",
-    fullName: "Priya Sharma",
+    firstName: "Priya",
+    lastName: "Sharma",
     email: "priya.sharma@example.com",
-    location: "Mumbai, India",
+    city: "Mumbai",
+    country: "India",
     status: "Active",
     riskProfile: "Balanced",
     subscriptionType: "Core",
@@ -105,9 +123,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_009",
-    fullName: "Chen Wei",
+    firstName: "Chen",
+    lastName: "Wei",
     email: "chen.wei@example.com",
-    location: "Shanghai, China",
+    city: "Shanghai",
+    country: "China",
     status: "Prospect",
     riskProfile: "Growth",
     subscriptionType: "Core",
@@ -116,9 +136,11 @@ export const CLIENTS: Client[] = [
   },
   {
     id: "cl_010",
-    fullName: "Lucas Silva",
+    firstName: "Lucas",
+    lastName: "Silva",
     email: "lucas.silva@example.com",
-    location: "São Paulo, Brazil",
+    city: "São Paulo",
+    country: "Brazil",
     status: "Inactive",
     riskProfile: "Balanced",
     subscriptionType: "Essentials",
