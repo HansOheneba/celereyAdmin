@@ -109,6 +109,9 @@ export default function ClientsPage() {
   const [selectedSubscriptions, setSelectedSubscriptions] = React.useState<
     SubscriptionType[]
   >([]);
+  const [selectedStatuses, setSelectedStatuses] = React.useState<
+    ClientStatus[]
+  >([]);
   const [selectedLastContact, setSelectedLastContact] = React.useState<
     string | null
   >(null);
@@ -153,6 +156,8 @@ export default function ClientsPage() {
     [],
   );
 
+  const statuses: ClientStatus[] = ["Active", "Prospect", "Inactive"];
+
   const filtered = React.useMemo(() => {
     const results = CLIENTS.filter((c) => {
       const q = query.trim().toLowerCase();
@@ -175,6 +180,11 @@ export default function ClientsPage() {
       // Country filter
       if (selectedCountries.length > 0) {
         if (!selectedCountries.includes(c.country)) return false;
+      }
+
+      // Status filter
+      if (selectedStatuses.length > 0) {
+        if (!selectedStatuses.includes(c.status)) return false;
       }
 
       // Subscription filter
@@ -224,6 +234,7 @@ export default function ClientsPage() {
   }, [
     query,
     selectedCountries,
+    selectedStatuses,
     selectedSubscriptions,
     selectedLastContact,
     lastContactSort,
@@ -235,6 +246,7 @@ export default function ClientsPage() {
 
   const hasActiveFilters =
     selectedCountries.length > 0 ||
+    selectedStatuses.length > 0 ||
     selectedSubscriptions.length > 0 ||
     selectedLastContact ||
     selectedAUARange ||
@@ -243,6 +255,7 @@ export default function ClientsPage() {
 
   const clearFilters = () => {
     setSelectedCountries([]);
+    setSelectedStatuses([]);
     setSelectedSubscriptions([]);
     setSelectedLastContact(null);
     setLastContactSort(null);
@@ -313,6 +326,51 @@ export default function ClientsPage() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => setSelectedCountries([])}
+                    className="text-sm text-muted-foreground justify-center"
+                  >
+                    Clear selection
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Status Filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-9 gap-2">
+                Status
+                <ChevronDown className="h-4 w-4 opacity-50" />
+                {selectedStatuses.length > 0 && (
+                  <Badge variant="secondary" className="ml-1">
+                    {selectedStatuses.length}
+                  </Badge>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {statuses.map((status) => (
+                <DropdownMenuCheckboxItem
+                  key={status}
+                  checked={selectedStatuses.includes(status)}
+                  onCheckedChange={(checked) => {
+                    setSelectedStatuses((prev) =>
+                      checked
+                        ? [...prev, status]
+                        : prev.filter((s) => s !== status),
+                    );
+                  }}
+                >
+                  {status}
+                </DropdownMenuCheckboxItem>
+              ))}
+              {selectedStatuses.length > 0 && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setSelectedStatuses([])}
                     className="text-sm text-muted-foreground justify-center"
                   >
                     Clear selection
