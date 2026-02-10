@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function NewClientPage() {
   const router = useRouter();
@@ -55,9 +57,16 @@ export default function NewClientPage() {
     <div className=" space-y-8">
       {/* Header */}
       <div>
+      <div className="flex items-center gap-2">
+           <Button variant="ghost" size="icon" asChild>
+          <Link href="/admin/clients">
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        </Button>
         <h1 className="text-2xl font-semibold tracking-tight">
           Add new client
         </h1>
+      </div>
         <p className="mt-2 text-muted-foreground">
           Create a new client profile.
         </p>

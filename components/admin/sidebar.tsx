@@ -46,8 +46,8 @@ export default function AdminSidebar() {
             <Image
               src="https://i.ibb.co/PGVKSsV1/image.png"
               alt="Celerey Logo"
-              width={120}
-              height={65}
+              width={100}
+              height={50}
               className="rounded-xl"
             />
           </div>
