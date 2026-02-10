@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,169 +14,209 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/client-utils";
 import { Client } from "@/lib/clients";
+import { cn } from "@/lib/utils";
 
 interface FinancialSnapshotCardProps {
   client: Client;
 }
 
-export function FinancialSnapshotCard({ client }: FinancialSnapshotCardProps) {
+type LineItem = { label: string; value?: number | null };
+
+function MoneyRow({ label, value }: { label: string; value: number }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Financial Snapshot</CardTitle>
-        <CardDescription>Assets, liabilities, and net worth</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {client.financialData ? (
-          <div className="space-y-6">
-            {/* Assets */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Assets</h3>
-              <div className="space-y-3">
-                {[
-                  {
-                    label: "Cash & Savings",
-                    value: client.financialData.cashSavings,
-                  },
-                  {
-                    label: "Investment Portfolio",
-                    value: client.financialData.investmentPortfolio,
-                  },
-                  {
-                    label: "Retirement Accounts",
-                    value: client.financialData.retirementAccounts,
-                  },
-                  {
-                    label: "Real Estate",
-                    value: client.financialData.realEstateValue,
-                  },
-                  {
-                    label: "Other Assets",
-                    value: client.financialData.otherAssets,
-                  },
-                ].map((item) =>
-                  item.value ? (
-                    <div
-                      key={item.label}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="text-muted-foreground">
-                        {item.label}
-                      </span>
-                      <span className="font-medium">
-                        {formatCurrency(item.value)}
-                      </span>
-                    </div>
-                  ) : null,
-                )}
-                <Separator />
-                <div className="flex justify-between items-center font-bold">
-                  <span>Total Assets</span>
-                  <span>
-                    {formatCurrency(client.financialData.totalAssets || 0)}
-                  </span>
-                </div>
-              </div>
-            </div>
+    <div className="flex items-center justify-between gap-4">
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="text-sm font-medium tabular-nums">
+        {formatCurrency(value)}
+      </span>
+    </div>
+  );
+}
 
-            {/* Liabilities */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Liabilities</h3>
-              <div className="space-y-3">
-                {[
-                  {
-                    label: "Mortgage Debt",
-                    value: client.financialData.mortgageDebt,
-                  },
-                  {
-                    label: "Student Loans",
-                    value: client.financialData.studentLoans,
-                  },
-                  {
-                    label: "Credit Card Debt",
-                    value: client.financialData.creditCardDebt,
-                  },
-                  {
-                    label: "Personal Loans",
-                    value: client.financialData.personalLoans,
-                  },
-                  {
-                    label: "Other Liabilities",
-                    value: client.financialData.otherLiabilities,
-                  },
-                ].map((item) =>
-                  item.value ? (
-                    <div
-                      key={item.label}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="text-muted-foreground">
-                        {item.label}
-                      </span>
-                      <span className="font-medium">
-                        {formatCurrency(item.value)}
-                      </span>
-                    </div>
-                  ) : null,
-                )}
-                <Separator />
-                <div className="flex justify-between items-center font-bold">
-                  <span>Total Liabilities</span>
-                  <span>
-                    {formatCurrency(client.financialData.totalLiabilities || 0)}
-                  </span>
-                </div>
-              </div>
-            </div>
+function SummaryTile({
+  label,
+  value,
+  emphasis = false,
+}: {
+  label: string;
+  value: React.ReactNode;
+  emphasis?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border bg-background/60 p-4 text-center shadow-sm",
+        "transition-colors hover:bg-background",
+      )}
+    >
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p
+        className={cn(
+          "mt-1 tabular-nums",
+          emphasis ? "text-2xl font-bold" : "text-xl font-semibold",
+        )}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
 
-            {/* Net Worth Summary */}
-            <div className="bg-muted p-4 rounded-lg">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground">Net Worth</p>
-                  <p className="text-2xl font-bold">
-                    {formatCurrency(client.financialData.netWorth || 0)}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Debt to Asset Ratio
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {client.financialData.debtToAssetRatio
-                      ? `${(client.financialData.debtToAssetRatio * 100).toFixed(1)}%`
-                      : "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
+function Section({
+  title,
+  items,
+  totalLabel,
+  totalValue,
+}: {
+  title: string;
+  items: LineItem[];
+  totalLabel: string;
+  totalValue: number;
+}) {
+  const visible = items.filter(
+    (i) => typeof i.value === "number" && i.value !== 0,
+  );
 
-            {/* Financial Goals */}
-            {client.financialData.financialGoals &&
-              client.financialData.financialGoals.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    Financial Goals
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {client.financialData.financialGoals.map((goal, index) => (
-                      <Badge key={index} variant="secondary">
-                        {goal}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-          </div>
+  return (
+    <div className="rounded-2xl border bg-background/50 p-4 md:p-5">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {visible.length ? (
+          visible.map((item) => (
+            <MoneyRow
+              key={item.label}
+              label={item.label}
+              value={item.value as number}
+            />
+          ))
         ) : (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">No financial data available</p>
-            <Button variant="outline" className="mt-2">
-              <Plus className="h-4 w-4 mr-2" />
+          <p className="text-sm text-muted-foreground">
+            No {title.toLowerCase()} recorded
+          </p>
+        )}
+
+        <Separator className="my-2" />
+
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-sm font-semibold">{totalLabel}</span>
+          <span className="text-sm font-semibold tabular-nums">
+            {formatCurrency(totalValue)}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function FinancialSnapshotCard({ client }: FinancialSnapshotCardProps) {
+  const fd = client.financialData;
+
+  if (!fd) {
+    return (
+      <Card>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-base">Financial Snapshot</CardTitle>
+          <CardDescription className="text-sm">
+            Assets, liabilities, and net worth
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <div className="rounded-2xl border bg-muted/30 p-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              No financial data available
+            </p>
+            <Button variant="outline" className="mt-3">
+              <Plus className="mr-2 h-4 w-4" />
               Add Financial Information
             </Button>
           </div>
-        )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const assets: LineItem[] = [
+    { label: "Cash & Savings", value: fd.cashSavings },
+    { label: "Investment Portfolio", value: fd.investmentPortfolio },
+    { label: "Retirement Accounts", value: fd.retirementAccounts },
+    { label: "Real Estate", value: fd.realEstateValue },
+    { label: "Other Assets", value: fd.otherAssets },
+  ];
+
+  const liabilities: LineItem[] = [
+    { label: "Mortgage Debt", value: fd.mortgageDebt },
+    { label: "Student Loans", value: fd.studentLoans },
+    { label: "Credit Card Debt", value: fd.creditCardDebt },
+    { label: "Personal Loans", value: fd.personalLoans },
+    { label: "Other Liabilities", value: fd.otherLiabilities },
+  ];
+
+  const netWorth = fd.netWorth ?? 0;
+  const totalAssets = fd.totalAssets ?? 0;
+  const totalLiabilities = fd.totalLiabilities ?? 0;
+
+  const ratioText =
+    typeof fd.debtToAssetRatio === "number"
+      ? `${(fd.debtToAssetRatio * 100).toFixed(1)}%`
+      : "N/A";
+
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-base">Financial Snapshot</CardTitle>
+        <CardDescription className="text-sm">
+          Assets, liabilities, and net worth
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="pt-0">
+        <div className="space-y-5">
+          {/* Assets + Liabilities as readable tiles */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <Section
+              title="Assets"
+              items={assets}
+              totalLabel="Total Assets"
+              totalValue={totalAssets}
+            />
+            <Section
+              title="Liabilities"
+              items={liabilities}
+              totalLabel="Total Liabilities"
+              totalValue={totalLiabilities}
+            />
+          </div>
+
+          {/* Summary */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <SummaryTile
+              label="Net Worth"
+              value={formatCurrency(netWorth)}
+              emphasis
+            />
+            <SummaryTile label="Debt to Asset Ratio" value={ratioText} />
+          </div>
+
+          {/* Goals */}
+          {fd.financialGoals?.length ? (
+            <div className="rounded-2xl border bg-background/50 p-4 md:p-5">
+              <h3 className="text-sm font-semibold tracking-tight">
+                Financial Goals
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {fd.financialGoals.map((goal, index) => (
+                  <Badge key={`${goal}-${index}`} variant="secondary">
+                    {goal}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
       </CardContent>
     </Card>
   );
