@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Sidebar,
@@ -17,18 +18,21 @@ import {
   LayoutDashboard,
   Users,
   FileText,
-  CreditCard,
-  Settings,
+Mic,
+Glasses,
   LifeBuoy,
   LogOut,
 } from "lucide-react";
+
 
 const nav = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Clients", href: "/admin/clients", icon: Users },
   { label: "Insights", href: "/admin/insights", icon: FileText },
-  { label: "Billing", href: "/admin/billing", icon: CreditCard },
-  { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Stories", href: "/admin/stories", icon: Glasses },
+  { label: "Podcasts", href: "/admin/podcasts", icon: Mic },
+  // { label: "Billing", href: "/admin/billing", icon: CreditCard },
+  // { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -37,16 +41,15 @@ export default function AdminSidebar() {
   return (
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarHeader className=" pt-2">
-        <Link
-          href="/admin"
-          className="flex items-center gap-3 rounded-md py-2"
-        >
-          <div className="h-9 w-9 rounded-xl bg-sidebar-accent grid place-items-center font-semibold">
-            C
-          </div>
-          <div className="leading-tight group-data-[collapsible=icon]:hidden">
-            <div className="text-sm font-semibold">Celerey Admin</div>
-            <div className="text-xs text-muted-foreground">Control center</div>
+        <Link href="/admin" className="flex items-center gap-3 rounded-md py-2">
+          <div className="flex justify-center w-full">
+            <Image
+              src="https://i.ibb.co/PGVKSsV1/image.png"
+              alt="Celerey Logo"
+              width={120}
+              height={65}
+              className="rounded-xl"
+            />
           </div>
         </Link>
       </SidebarHeader>
@@ -55,7 +58,9 @@ export default function AdminSidebar() {
         <SidebarMenu>
           {nav.map((item) => {
             const active =
-              pathname === item.href || pathname.startsWith(item.href + "/");
+              item.href === "/admin"
+                ? pathname === "/admin"
+                : pathname.startsWith(item.href);
 
             return (
               <SidebarMenuItem key={item.href}>
@@ -63,6 +68,7 @@ export default function AdminSidebar() {
                   asChild
                   isActive={active}
                   tooltip={item.label}
+                  className="data-[active=true]:bg-[#1B1856] data-[active=true]:text-white hover:data-[active=true]:bg-[#1B1856]"
                 >
                   <Link href={item.href} className="flex items-center gap-2">
                     <item.icon />

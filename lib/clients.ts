@@ -1,5 +1,6 @@
 export type ClientStatus = "Active" | "Prospect" | "Inactive";
 export type RiskProfile = "Conservative" | "Balanced" | "Growth";
+export type SubscriptionType = "Essentials" | "Core" | "Concierge";
 
 export type Client = {
   id: string;
@@ -8,6 +9,7 @@ export type Client = {
   location: string;
   status: ClientStatus;
   riskProfile: RiskProfile;
+  subscriptionType: SubscriptionType;
   aua: number; // Assets Under Advisement in USD
   lastContactedAt: string; // ISO date
 };
@@ -20,6 +22,7 @@ export const CLIENTS: Client[] = [
     location: "Accra, Ghana",
     status: "Active",
     riskProfile: "Balanced",
+    subscriptionType: "Core",
     aua: 125000,
     lastContactedAt: "2026-02-02",
   },
@@ -30,6 +33,7 @@ export const CLIENTS: Client[] = [
     location: "Kumasi, Ghana",
     status: "Prospect",
     riskProfile: "Growth",
+    subscriptionType: "Essentials",
     aua: 35000,
     lastContactedAt: "2026-01-28",
   },
@@ -40,6 +44,7 @@ export const CLIENTS: Client[] = [
     location: "London, UK",
     status: "Inactive",
     riskProfile: "Conservative",
+    subscriptionType: "Essentials",
     aua: 8500,
     lastContactedAt: "2025-12-14",
   },
@@ -50,6 +55,7 @@ export const CLIENTS: Client[] = [
     location: "Toronto, Canada",
     status: "Active",
     riskProfile: "Balanced",
+    subscriptionType: "Core",
     aua: 185000,
     lastContactedAt: "2026-02-01",
   },
@@ -60,6 +66,7 @@ export const CLIENTS: Client[] = [
     location: "Paris, France",
     status: "Active",
     riskProfile: "Growth",
+    subscriptionType: "Concierge",
     aua: 520000,
     lastContactedAt: "2026-02-03",
   },
@@ -70,6 +77,7 @@ export const CLIENTS: Client[] = [
     location: "Madrid, Spain",
     status: "Prospect",
     riskProfile: "Conservative",
+    subscriptionType: "Essentials",
     aua: 42000,
     lastContactedAt: "2026-01-25",
   },
@@ -80,6 +88,7 @@ export const CLIENTS: Client[] = [
     location: "Tokyo, Japan",
     status: "Active",
     riskProfile: "Growth",
+    subscriptionType: "Concierge",
     aua: 750000,
     lastContactedAt: "2026-02-02",
   },
@@ -90,6 +99,7 @@ export const CLIENTS: Client[] = [
     location: "Mumbai, India",
     status: "Active",
     riskProfile: "Balanced",
+    subscriptionType: "Core",
     aua: 98000,
     lastContactedAt: "2026-01-30",
   },
@@ -100,6 +110,7 @@ export const CLIENTS: Client[] = [
     location: "Shanghai, China",
     status: "Prospect",
     riskProfile: "Growth",
+    subscriptionType: "Core",
     aua: 325000,
     lastContactedAt: "2026-01-29",
   },
@@ -110,6 +121,7 @@ export const CLIENTS: Client[] = [
     location: "São Paulo, Brazil",
     status: "Inactive",
     riskProfile: "Balanced",
+    subscriptionType: "Essentials",
     aua: 15000,
     lastContactedAt: "2025-12-20",
   },
