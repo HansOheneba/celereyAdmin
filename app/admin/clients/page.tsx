@@ -60,14 +60,17 @@ function formatAUA(aua: number) {
 }
 
 function StatusBadge({ status }: { status: ClientStatus }) {
-  const variant =
-    status === "Active"
-      ? "default"
-      : status === "Prospect"
-        ? "secondary"
-        : "outline";
+  const variants = {
+    Active: "bg-[#2d1b4e] text-white",
+    Prospect: "bg-secondary text-secondary-foreground",
+    Inactive: "bg-outline text-foreground",
+  };
 
-  return <Badge variant={variant}>{status}</Badge>;
+  return (
+    <Badge className={variants[status]} variant="default">
+      {status}
+    </Badge>
+  );
 }
 
 function RiskBadge({ risk }: { risk: RiskProfile }) {
@@ -254,7 +257,6 @@ export default function ClientsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Clients</h1>
- 
       </div>
 
       {/* Controls */}
